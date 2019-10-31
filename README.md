@@ -1,9 +1,9 @@
 # DCWKWebView
 重构项目中WKWebView的应用，支持更多的功能。
 
-   1、~~支持共享cookie设置~~ <br>
-   2、基础偏好设置 <br>
-   3、播放视频设置 <br>
+   1、基础偏好设置 <br>
+   2、播放视频设置 <br>
+   3、~~支持共享cookie设置~~ <br>
    4、~~支持JS注入~~ <br>
    5、~~支持webview复用~~ <br>
    6、~~支持多代理回调~~ <br>
@@ -20,6 +20,10 @@
    17、支持自定义MenuItems <br>
    18、~~支持自定义的内部协议~~ <br>
    19、~~支持POST请求~~
+   
+   
+   
+   https://blog.csdn.net/tencent_bugly/article/details/54668721/
    
  
  
