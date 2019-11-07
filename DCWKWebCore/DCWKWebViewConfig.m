@@ -19,4 +19,13 @@
     return sharedInstance;
 }
 
+- (instancetype)init {
+    self = [super init];
+    if(self){
+        _longPressing = NO;
+    }
+    
+    return self;
+}
+
 @end

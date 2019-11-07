@@ -38,7 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)wkWebViewContentSizeHeight:(CGFloat)height;
 
 //二维码识别出的内容
-- (void)wkWebViewQrCodeRecognition:(NSString *)qrCodeUrl;
+- (void)wkWebViewQrCodeReader:(NSString *)qrCodeUrl;
+
+// 内部协议跳转
+- (void)internalProtocolRouter:(NSString *)protocolPath;
 
 @end
 

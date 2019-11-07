@@ -26,8 +26,11 @@ NS_ASSUME_NONNULL_BEGIN
 // H5微信支付回调的Schemes | wxfq 是微信付钱的表示 避免wxpay关键字的出现
 @property (nonatomic,strong) NSString *wxfqSchemes;
 
-// 是否开启图片预览功能
+// 是否开启图片预览功能 
 @property (nonatomic,assign) BOOL isOpenImagePreview;
+
+// 防止长按图片的时候 不去触发点击预览的事件
+@property (nonatomic,assign) BOOL longPressing;
 
 @end
 

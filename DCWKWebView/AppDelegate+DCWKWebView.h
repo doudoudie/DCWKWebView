@@ -13,9 +13,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AppDelegate (DCWKWebView)
 
-- (void)wkWebViewQrCodeRecognition:(NSString *)qrCodeUrl;
+// 长按识别二维码
+- (void)wkWebViewQrCodeReader:(NSString *)qrCodeContent;
 
-- (void)customProtocolRouter:(NSString *)protocolPath;
+// 内部协议跳转
+- (void)internalProtocolRouter:(NSString *)protocolPath;
+
+// 点击图片预览
+- (void)imagePreview:(NSString *)url;
 
 @end
 

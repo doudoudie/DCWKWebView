@@ -8,7 +8,9 @@
 
 #import "DCWKWebView.h"
 #import "WKWebView+ExternalDelegate.h"
+#import "WKWebView+DCExtension.h"
 #import "DCWKWebViewHandle.h"
+#import "DCWKWebViewMacro.h"
 
 @interface DCWKWebView ()<UIGestureRecognizerDelegate>
 
@@ -35,8 +37,41 @@
     return self;
 }
 
-- (void)postUrl:(NSURL *)url {
+// 发起DCWKWebView的Request请求
+- (void)requestUrl:(NSURL *)url {
     [self loadRequest:[NSURLRequest requestWithURL:url]];
+}
+
+// 发起DCWKWebView的Request请求 并且是POST的请求方式, 参数body里带
+- (void)requestUrl:(NSURL *)url parameters:(NSDictionary *)params{
+    
+    if(params) {
+    
+        [self safeAsyncEvaluateJavaScriptString:DCPOST_JS];
+        
+        NSError *parseError;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&parseError];
+        
+        NSString * dataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        // 要访问的地址
+        NSString * url_string = [NSString stringWithFormat:@"%@",url];
+        
+        NSString * js = [NSString stringWithFormat:@"DC_POSTMethod(\"%@\", %@)",url_string,dataStr];
+        // 最后执行JS代码
+        [self safeAsyncEvaluateJavaScriptString:js];
+    
+    }else {
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        request.HTTPMethod = @"POST";
+        [self loadRequest:request];
+    }
+}
+
+// 加载一段html代码的字符串
+- (void)loadHtml:(NSString *)html {
+    [self loadHTMLString:html baseURL:nil];
 }
 
 - (void)clearRequestEnterPool {
@@ -49,7 +84,7 @@
 
 - (void)addLongPress {
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    longPress.minimumPressDuration = 0.2;
+    longPress.minimumPressDuration = 0.5;
     longPress.delegate = self;
     [self addGestureRecognizer:longPress];
 }

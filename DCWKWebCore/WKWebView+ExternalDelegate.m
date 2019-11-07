@@ -9,6 +9,7 @@
 #import "WKWebView+ExternalDelegate.h"
 #import "WKWebView+DCExtension.h"
 #import "DCWKWebViewHandle.h"
+#import "DCWKWebViewConfig.h"
 
 #import <objc/runtime.h>
 
@@ -74,9 +75,14 @@ decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:callPhone]];
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
-    }else if ([absoluteString hasPrefix:@"https://itunes.apple.com"]) {
+    }else if ([absoluteString hasPrefix:@"https://itunes.apple.com"] || [absoluteString hasPrefix:@"itms-apps://itunes.apple.com/"]) {
         NSURL *URL = navigationAction.request.URL;
         [[UIApplication sharedApplication] openURL:URL];
+        decisionHandler(WKNavigationActionPolicyCancel);
+        return;
+    }
+    
+    if([DCWKWebViewConfig sharedInstance].longPressing && [absoluteString hasPrefix:@"image-preview://"]){
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
     }

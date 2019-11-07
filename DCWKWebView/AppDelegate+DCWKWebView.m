@@ -9,16 +9,34 @@
 #import "AppDelegate+DCWKWebView.h"
 #import "DCWKWebViewCtrl.h"
 
+#import "ArticleDetailViewController.h"
+
 @implementation AppDelegate (DCWKWebView)
 
-- (void)wkWebViewQrCodeRecognition:(NSString *)qrCodeUrl{
-    NSLog(@"AppDelegate 二维码链接地址:%@",qrCodeUrl);
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+    if ([[url absoluteString] hasPrefix:@"dcwk"]) {
+        NSLog(@"H5微信支付回调的地方 %s",__func__);
+    }
+    return YES;
 }
 
-- (void)customProtocolRouter:(NSString *)protocolPath {
-    DCWKWebViewCtrl *ctrl = [DCWKWebViewCtrl new];
-    ctrl.url = [NSURL URLWithString:protocolPath];
-    [[self rootViewController].navigationController pushViewController:ctrl animated:YES];
+- (void)wkWebViewQrCodeReader:(NSString *)qrCodeContent{
+    NSLog(@"AppDelegate 二维码链接地址:%@",qrCodeContent);
+    // 扫描的结果 也可以是一个自定义的协议
+}
+
+- (void)internalProtocolRouter:(NSString *)protocolPath {
+    
+    ArticleDetailViewController *ctrl = [[ArticleDetailViewController alloc] init];
+    [self.rootViewController.navigationController pushViewController:ctrl animated:YES];
+}
+
+- (void)imagePreview:(NSString *)url {
+    NSLog(@"image-Preview: %@",url);
 }
 
 - (UIViewController *)rootViewController {

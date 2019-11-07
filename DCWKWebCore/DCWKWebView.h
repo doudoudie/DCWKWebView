@@ -18,8 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithFrame:(CGRect)frame;
 
-// 发起DCWKWebView 的Request请求
-- (void)postUrl:(NSURL *)url;
+// 发起DCWKWebView的Request请求
+- (void)requestUrl:(NSURL *)url;
+// 发起DCWKWebView的Request请求 并且是POST的请求方式, 可传递参数
+- (void)requestUrl:(NSURL *)url parameters:(NSDictionary *)params;
+// 加载一段html代码的字符串
+- (void)loadHtml:(NSString *)html;
 
 // 进回收池前 wkWebView清理
 - (void)clearRequestEnterPool;

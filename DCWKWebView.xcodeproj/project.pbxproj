@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF2031F02367F53B00F039E0 /* ArticleDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2031EF2367F53B00F039E0 /* ArticleDetailViewController.m */; };
+		FF2031F223681B4300F039E0 /* article.html in Resources */ = {isa = PBXBuildFile; fileRef = FF2031F123681B4300F039E0 /* article.html */; };
+		FF2031F5236821B800F039E0 /* TestDCWKWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = FF2031F4236821B800F039E0 /* TestDCWKWebView.m */; };
 		FF3B219A2355B9190038025D /* WKWebView+ExternalDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FF3B21992355B9190038025D /* WKWebView+ExternalDelegate.m */; };
 		FF3BCF61233DE74B007EDF9B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FF3BCF60233DE74B007EDF9B /* AppDelegate.m */; };
 		FF3BCF64233DE74B007EDF9B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF3BCF63233DE74B007EDF9B /* ViewController.m */; };
@@ -49,6 +52,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FF2031EE2367F53B00F039E0 /* ArticleDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArticleDetailViewController.h; sourceTree = "<group>"; };
+		FF2031EF2367F53B00F039E0 /* ArticleDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArticleDetailViewController.m; sourceTree = "<group>"; };
+		FF2031F123681B4300F039E0 /* article.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = article.html; sourceTree = "<group>"; };
+		FF2031F3236821B800F039E0 /* TestDCWKWebView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestDCWKWebView.h; sourceTree = "<group>"; };
+		FF2031F4236821B800F039E0 /* TestDCWKWebView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestDCWKWebView.m; sourceTree = "<group>"; };
 		FF3B21982355B9190038025D /* WKWebView+ExternalDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WKWebView+ExternalDelegate.h"; sourceTree = "<group>"; };
 		FF3B21992355B9190038025D /* WKWebView+ExternalDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WKWebView+ExternalDelegate.m"; sourceTree = "<group>"; };
 		FF3BCF5C233DE74B007EDF9B /* DCWKWebView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DCWKWebView.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,12 +154,17 @@
 			children = (
 				FF552BCF2362EC0400CA685D /* DCJSBridge.js */,
 				FF552BD12362EDBD00CA685D /* simple.html */,
+				FF2031F123681B4300F039E0 /* article.html */,
 				FF3BCF5F233DE74B007EDF9B /* AppDelegate.h */,
 				FF3BCF60233DE74B007EDF9B /* AppDelegate.m */,
 				FF552BC923603BB600CA685D /* AppDelegate+DCWKWebView.h */,
 				FF552BCA23603BB600CA685D /* AppDelegate+DCWKWebView.m */,
 				FF3BCF62233DE74B007EDF9B /* ViewController.h */,
 				FF3BCF63233DE74B007EDF9B /* ViewController.m */,
+				FF2031EE2367F53B00F039E0 /* ArticleDetailViewController.h */,
+				FF2031EF2367F53B00F039E0 /* ArticleDetailViewController.m */,
+				FF2031F3236821B800F039E0 /* TestDCWKWebView.h */,
+				FF2031F4236821B800F039E0 /* TestDCWKWebView.m */,
 				FF3BCF65233DE74B007EDF9B /* Main.storyboard */,
 				FF3BCF68233DE74C007EDF9B /* Assets.xcassets */,
 				FF3BCF6A233DE74C007EDF9B /* LaunchScreen.storyboard */,
@@ -323,6 +336,7 @@
 				FF552BD22362EDBD00CA685D /* simple.html in Resources */,
 				FF3BCF69233DE74C007EDF9B /* Assets.xcassets in Resources */,
 				FF3BCF67233DE74B007EDF9B /* Main.storyboard in Resources */,
+				FF2031F223681B4300F039E0 /* article.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,8 +372,10 @@
 				FF552BCE23605CED00CA685D /* DCWKWebViewConfig.m in Sources */,
 				FF3BCF94233DE963007EDF9B /* DCWKWebViewCtrl.m in Sources */,
 				FF552BC8235F01E800CA685D /* DCWKWebViewHandle.m in Sources */,
+				FF2031F02367F53B00F039E0 /* ArticleDetailViewController.m in Sources */,
 				FF3BCFA62340BECE007EDF9B /* WKWebView+DCExtension.m in Sources */,
 				FF3BCF9D233DF7E9007EDF9B /* DCWKWebMnager.m in Sources */,
+				FF2031F5236821B800F039E0 /* TestDCWKWebView.m in Sources */,
 				FF3BCF97233DEB9E007EDF9B /* DCWKWebView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

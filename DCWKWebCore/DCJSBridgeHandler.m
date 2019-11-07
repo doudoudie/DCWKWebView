@@ -62,12 +62,12 @@
 // 方法回调
 - (void)handlerCallBack:(NSString *)functionName callbackId:(int)callbackId args:(NSDictionary *)args webView:(id)webView{
     
-    // 注册一个JS的回调
-    //[self.bridgeHandler registerHandler:@"getIdentity" responseHandler:^(NSInteger callbackId, NSString * _Nonnull handlerName, id  _Nonnull responseData) {
-    
-    //}];
-    
 }
+
+// 注册一个JS的回调
+//[self.bridgeHandler registerHandler:@"getIdentity" responseHandler:^(NSInteger callbackId, NSString * _Nonnull handlerName, id  _Nonnull responseData) {
+
+//}];
 
 - (void)dealloc
 {

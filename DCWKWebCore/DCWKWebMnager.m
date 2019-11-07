@@ -29,20 +29,28 @@
     return sharedInstance;
 }
 
+- (instancetype)init{
+    if(self = [super init]){
+        _bridgeHandle = [[DCJSBridgeHandler alloc] initWithDelegate:self];
+    }
+    return self;
+}
+
 - (void)setupDCWKWebView:(nonnull DCWKWebViewConfig *)config{
     [DCWKWebViewConfig sharedInstance].protocols = config.protocols;
+    [DCWKWebViewConfig sharedInstance].wxfqSchemes = config.wxfqSchemes;
+    [DCWKWebViewConfig sharedInstance].isOpenImagePreview = config.isOpenImagePreview;
     __weak typeof (self)weakSelf = self;
     // 默认缓存框架内的 WKWebViewController
     DCWKWebView *tempWebView = [self dequeueDCWKWebViewWithDelegate:@"DCWKWebViewCtrl"];
     //全局设置UserAgent
     [tempWebView ConfigDCWKWebViewUA:config.uaString completionBlock:^(BOOL success) {
-       [tempWebView.configuration.userContentController removeScriptMessageHandlerForName:@"DCJSBridge"];
        [weakSelf enqueueDCWKWebView:tempWebView];
     }];
 }
 
 - (DCWKWebView *)dequeueDCWKWebViewWithDelegate:(id)delegate{
-    self.bridgeHandle = [[DCJSBridgeHandler alloc] init];
+    
     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
     configuration.userContentController = [WKUserContentController new];
     [configuration.userContentController addScriptMessageHandler:self.bridgeHandle name:@"DCJSBridge"];

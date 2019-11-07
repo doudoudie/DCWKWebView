@@ -21,9 +21,13 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+    self.window.backgroundColor = [UIColor grayColor];
+    
     DCWKWebViewConfig *config = [[DCWKWebViewConfig alloc] init];
     config.uaString = @"dcapp://";
     config.protocols = @[@"app://"];
+    config.wxfqSchemes = @"dcwk.wxpay.wxutil.com"; //设置微信H5支付的回调schemes
+    config.isOpenImagePreview = YES;
     
     [[DCWKWebMnager sharedInstance] setupDCWKWebView:config];
     

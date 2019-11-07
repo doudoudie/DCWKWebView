@@ -12,7 +12,7 @@
 #import "DCWKWebViewConfig.h"
 
 @interface DCWKWebViewHandle ()<UIActionSheetDelegate>
-@property (nonatomic,strong) NSString *qrCodeUrl;
+@property (nonatomic,strong) NSString *qrCodeContent;
 @end
 
 @implementation DCWKWebViewHandle
@@ -29,24 +29,29 @@
             return;
         }
         
+        NSLog(@"读取图片成功");
+        [DCWKWebViewConfig sharedInstance].longPressing = YES;
+        
         UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             NSLog(@"Cancel Action");
+            [DCWKWebViewConfig sharedInstance].longPressing = NO;
         }];
         UIAlertAction *saveAction = [UIAlertAction actionWithTitle:@"保存图片" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             NSLog(@"Save Action");
+            [DCWKWebViewConfig sharedInstance].longPressing = NO;
             [self loadImageFinished:image];
         }];
         UIAlertAction *identifyAction = [UIAlertAction actionWithTitle:@"识别图片二维码" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             NSLog(@"Cancel Action");
-            
-            if ([wkWebView.mainNavigationDelegate respondsToSelector:@selector(wkWebViewQrCodeRecognition:)]) {
-                [wkWebView.mainNavigationDelegate wkWebViewQrCodeRecognition:self.qrCodeUrl];
+            [DCWKWebViewConfig sharedInstance].longPressing = NO;
+            if ([wkWebView.mainNavigationDelegate respondsToSelector:@selector(wkWebViewQrCodeReader:)]) {
+                [wkWebView.mainNavigationDelegate wkWebViewQrCodeReader:self.qrCodeContent];
             }
             
             id<UIApplicationDelegate> delegate = (id)[UIApplication sharedApplication].delegate;
-            if ([delegate respondsToSelector:@selector(wkWebViewQrCodeRecognition:)]) {
-                [delegate performSelector:@selector(wkWebViewQrCodeRecognition:) withObject:self.qrCodeUrl];
+            if ([delegate respondsToSelector:@selector(wkWebViewQrCodeReader:)]) {
+                [delegate performSelector:@selector(wkWebViewQrCodeReader:) withObject:self.qrCodeContent];
             }
         }];
         if([self isAvailableQRcodeIn:image]){
@@ -62,6 +67,7 @@
     }];
 }
 
+#pragma mark - 点击放大图片查看
 + (void)registerImageClick:(WKWebView *)wkWebView {
 
     // 如果图片预览功能未被开启 则不需要给img标签添加click事件
@@ -92,8 +98,8 @@
     NSArray *features = [detector featuresInImage:[CIImage imageWithCGImage:image.CGImage]];
     if (features.count >= 1) {
         CIQRCodeFeature *feature = [features objectAtIndex:0];
-        self.qrCodeUrl = [feature.messageString copy];
-        NSLog(@"二维码信息:%@", self.qrCodeUrl);
+        self.qrCodeContent = [feature.messageString copy];
+        NSLog(@"二维码信息:%@", self.qrCodeContent);
         return YES;
     } else {
         NSLog(@"无可识别的二维码");
@@ -142,10 +148,12 @@
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
 {
     NSLog(@"image = %@, error = %@, contextInfo = %@", image, error, contextInfo);
-    NSLog(@"Save Image OK");
+    if(error != nil){
+        NSLog(@"Save Image OK");
+    }
 }
 
-+ (BOOL)containsCustomProtocolWithUrl:(NSString *)urlString {
++ (BOOL)containsInternalProtocolWithUrl:(NSString *)urlString {
     BOOL contains = NO;
     for (NSString *protocolPath in [DCWKWebViewConfig sharedInstance].protocols) {
         if([urlString hasPrefix:protocolPath]){

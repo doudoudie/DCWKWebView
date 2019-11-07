@@ -25,6 +25,8 @@
 @property (nonatomic, strong) UIProgressView *progressView;
 @property (nonatomic,strong) DCWKWebViewToolBar *toolBar;
 @property (nonatomic,assign) BOOL showToolBarStatus;
+@property (nonatomic,strong) DCJSBridgeHandler *bridgeHandle;
+
 @end
 
 @implementation DCWKWebViewCtrl
@@ -54,25 +56,13 @@
     }
 }
 
-- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
-{
-    NSLog(@"%@",NSStringFromSelector(_cmd));
-    NSLog(@"%@",message.body);
-    
-}
-
 #pragma mark - UI控件懒加载
 - (DCWKWebView *)wkWebView {
     if (!_wkWebView) {
-        
         _wkWebView = [[DCWKWebMnager sharedInstance] dequeueDCWKWebViewWithDelegate:self];
         _wkWebView.frame = self.view.bounds;
         _wkWebView.scrollView.delegate = self;
-        [_wkWebView postUrl:self.url];
-        
-        _wkWebView.scrollView.contentInset = UIEdgeInsetsMake(88, 0, 49, 0);
-        //史诗级神坑，为何如此写呢？参考https://opensource.apple.com/source/WebKit2/WebKit2-7600.1.4.11.10/ChangeLog
-        [_wkWebView setValue:[NSValue valueWithUIEdgeInsets:_wkWebView.scrollView.contentInset] forKey:@"_obscuredInsets"]; //kvc给WKWebView的私有变量_obscuredInsets设置值
+        [_wkWebView requestUrl:self.url];
         
     }
     return _wkWebView;
@@ -92,7 +82,7 @@
     self.toolBar.hidden = NO;
     __weak typeof (self)weakSelf = self;
     [UIView animateWithDuration:0.25 animations:^{
-        weakSelf.toolBar.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 60, [UIScreen mainScreen].bounds.size.width, 60 + SafeBottomHeight);
+        weakSelf.toolBar.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 60 - SafeBottomHeight, [UIScreen mainScreen].bounds.size.width, 60 + SafeBottomHeight);
     } completion:^(BOOL finished) {
         weakSelf.wkWebView.frame = CGRectMake(weakSelf.wkWebView.frame.origin.x, weakSelf.wkWebView.frame.origin.y, weakSelf.wkWebView.frame.size.width, [UIScreen mainScreen].bounds.size.height - 60);
     }];
@@ -141,6 +131,7 @@
     [webView safeAsyncEvaluateJavaScriptString:@"document.documentElement.style.webkitUserSelect='none';"];
     //禁用 长按弹出ActionSheet
     [webView safeAsyncEvaluateJavaScriptString:@"document.documentElement.style.webkitTouchCallout='none';"];
+    
     if(webView.canGoBack || webView.canGoForward) {
         self.showToolBarStatus = YES;
         [self showToolBar];
@@ -164,11 +155,11 @@ didReceiveServerRedirectForProvisionalNavigation:(null_unspecified WKNavigation 
     
     NSString *absoluteString = [navigationAction.request.URL.absoluteString stringByRemovingPercentEncoding];
     
-    if([DCWKWebViewHandle containsCustomProtocolWithUrl:absoluteString]){
+    if([DCWKWebViewHandle containsInternalProtocolWithUrl:absoluteString]){
         id<UIApplicationDelegate> applicateDelegate = (id)[UIApplication sharedApplication].delegate;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        SEL sel = NSSelectorFromString(@"customProtocolRouter:");
+        SEL sel = NSSelectorFromString(@"internalProtocolRouter:");
         if ([applicateDelegate respondsToSelector:sel]) {
             [applicateDelegate performSelector:sel withObject:absoluteString];
         }
@@ -177,6 +168,15 @@ didReceiveServerRedirectForProvisionalNavigation:(null_unspecified WKNavigation 
         return;
     }else if([absoluteString hasPrefix:@"image-preview://"]){
         NSLog(@"图片预览 %@",absoluteString);
+        id<UIApplicationDelegate> applicateDelegate = (id)[UIApplication sharedApplication].delegate;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        SEL sel = NSSelectorFromString(@"imagePreview:");
+        if ([applicateDelegate respondsToSelector:sel]) {
+            [applicateDelegate performSelector:sel withObject:absoluteString];
+        }
+#pragma clang diagnostic pop
+        
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
     }
@@ -277,7 +277,7 @@ didReceiveServerRedirectForProvisionalNavigation:(null_unspecified WKNavigation 
     }
 }
 
-// 微信支付新发起一个请求
+ #pragma mark - 微信支付新发起一个请求
 - (void)request_redirect_url:(NSString *)absoluteString request:(NSURLRequest *)request{
     //The string Scheme_Domain must be configured by wechat background. It must be your company first domin. You also should configure "URL types" in the Info.plist file.
     
@@ -304,14 +304,12 @@ didReceiveServerRedirectForProvisionalNavigation:(null_unspecified WKNavigation 
 - (void)dealloc {
     [self.wkWebView removeObserver:self forKeyPath:@"estimatedProgress"];
     [self.wkWebView removeObserver:self forKeyPath:@"title"];
-    [self.wkWebView.configuration.userContentController removeScriptMessageHandlerForName:@"DCJSBridge"];
+    //[self.wkWebView.configuration.userContentController removeScriptMessageHandlerForName:@"DCJSBridge"];
     [[DCWKWebMnager sharedInstance] enqueueDCWKWebView:self.wkWebView];
     self.wkWebView = nil;
     self.toolBar = nil;
     NSLog(@"dealloc DCWKWebViewController");
 }
-
-
 
 /*
 #pragma mark - Navigation

@@ -37,13 +37,13 @@
 - (void)initToolBarUI {
     CGFloat centerLine = [UIScreen mainScreen].bounds.size.width / 2;
     
-    self.goBackButton = [[UIButton alloc] initWithFrame:CGRectMake(centerLine - 15 - 32, 5, 32, 32)];
+    self.goBackButton = [[UIButton alloc] initWithFrame:CGRectMake(centerLine - 15 - 32, 13, 32, 32)];
     [self.goBackButton setImage:[UIImage imageNamed:@"arrow_left_dark"] forState:UIControlStateNormal];
     [self.goBackButton setImage:[UIImage imageNamed:@"arrow_left_light"] forState:UIControlStateSelected];
     [self.goBackButton addTarget:self action:@selector(goBackButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.goBackButton];
     
-    self.goForwardButton = [[UIButton alloc] initWithFrame:CGRectMake(centerLine + 15, 5, 32, 32)];
+    self.goForwardButton = [[UIButton alloc] initWithFrame:CGRectMake(centerLine + 15, 13, 32, 32)];
     [self.goForwardButton setImage:[UIImage imageNamed:@"arrow_right_dark"] forState:UIControlStateNormal];
     [self.goForwardButton setImage:[UIImage imageNamed:@"arrow_right_light"] forState:UIControlStateSelected];
     [self.goForwardButton addTarget:self action:@selector(goForwardButtonAction:) forControlEvents:UIControlEventTouchUpInside];

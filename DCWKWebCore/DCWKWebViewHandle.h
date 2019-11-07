@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)registerImageClick:(WKWebView *)wkWebView;
 
 //判断地址是否包含自定义协议
-+ (BOOL)containsCustomProtocolWithUrl:(NSString *)urlString;
++ (BOOL)containsInternalProtocolWithUrl:(NSString *)urlString;
 
 + (UIColor *)stringTOColor:(NSString *)str;
 

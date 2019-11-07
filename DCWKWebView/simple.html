@@ -22,27 +22,94 @@
 
     <script type="text/javascript" src="./DCJSBridge.js"></script>
 
+    <script async>
+        
+        function testJSBridge()
+        {
+            DCJSBridge.bridgeHandler("testJSBridge",{'name':'dengdeng','age':'18'},function(result){
+                                     
+                                     });
+        }
+    
+      function testRegisrerJSBridge()
+      {
+           DCJSBridge.bridgeHandler("testRegisrerJSBridge",{'name':'dengdeng','age':'18'},function(result){
+                                 
+                                 });
+      }
+    
+    function testPOSTRequest()
+    {
+        DCJSBridge.bridgeHandler("testPOSTRequest",{'name':'dengdeng','age':'18'},function(result){
+                                 
+                                 });
+    }
+    
+        </script>
+    
 </head>
 
 <body>
     
-    <input id='button' type = 'button' value = '测试' onclick="testJSBridge()"></input>
-
+    
+    <p>
+    换行段落
+    </p>
+    
+    <p>
+    换行段落
+    </p>
+    
+    <input id='testJSBridge' type = 'button' value = '测试自定义JSBridge' onclick="testJSBridge()"></input>
+    
+    <p>
+    换行段落
+    </p>
+    
+    <p>
+    换行段落
+    </p>
+    
+    <input id='testEvaluateJS' type = 'button' value = '测试JS的注入' ></input>
+    
+    <p style='color:red;font-size:12px'>
+     点击此按钮没反应时 试着点下右上角的“注入JS” 按钮 在点击 “测试JS的注入”
+    </p>
+    
+    <p>
+    换行段落
+    </p>
+    
+    <p>
+    换行段落
+    </p>
+    
+    <input id='button' type = 'button' value = '测试注册回调JSBridge' onclick="testRegisrerJSBridge()"></input>
+    
+    <p>
+    换行段落
+    </p>
+    
+    <p>
+    换行段落
+    </p>
+    
+    <input id='button' type = 'button' value = '测试POST请求' onclick="testPOSTRequest()"></input>
+    
+    <p>
+    换行段落
+    </p>
+    
+    <p>
+    换行段落
+    </p>
+    
+    <p>
+    <p>
+    
 </body>
 
 </html>
 
 
-<script async>
-    
-    function testJSBridge()
-    {
-        console.log(12);
-        DCJSBridge.bridgeHandler("xxx",{'name':'登登'},function(result){
-                                 
-                                 });
-                                 
-        <!--           window.webkit.messageHandlers.DCJSBridge.postMessage({'name': 'zhangyutang', 'age': 12});-->
-    }
 
-</script>
