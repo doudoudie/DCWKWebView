@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
+#import "DCJSBridgeHandler.h"
 #define macro
-@class DCWKWebView,DCJSBridgeHandle,DCWKWebViewConfig;
+@class DCWKWebView,DCWKWebViewConfig;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,6 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
  @param wkWebView 可复用的wkWebView
  */
 - (void)enqueueDCWKWebView:(DCWKWebView *)wkWebView;
+
+- (void)registerHandler:(NSString*)handlerName responseHandler:(DCBridgeResponseHandler)handler;
+
+- (void)removeHandler:(NSString*)handlerName;
 
 @end
 

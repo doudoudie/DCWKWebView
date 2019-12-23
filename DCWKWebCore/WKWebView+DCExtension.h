@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^DCWKWebViewJSCompletionBlock)(NSObject *result);
+typedef void (^DCWKWebViewJSCompletionBlock)(id result);
 
 @interface WKWebView (DCExtension)
 

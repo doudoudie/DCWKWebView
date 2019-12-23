@@ -36,10 +36,11 @@
     NSDictionary *data13 = @{@"title":@"H5支付宝支付和返回原生App",@"url":@"https://m.pay.verystar.net/h5demo/",@"intro":@"",@"type":@"1"};
     NSDictionary *data8 = @{@"title":@"自定义MenuItems (未实现)",@"url":@"https://wxpay.wxutil.com/mch/pay/h5.v2.php",@"intro":@"",@"type":@"7"};
     NSDictionary *data9 = @{@"title":@"支持POST请求",@"url":[[NSBundle mainBundle] URLForResource:@"simple" withExtension:@"html"],@"intro":@"",@"type":@"3"};
-    NSDictionary *data10 = @{@"title":@"文章详情-测试回调高度",@"url":@"",@"type":@"4"};
-    NSDictionary *data11 = @{@"title":@"不使用自带的控制器-注册回调JSBridge",@"url":[[NSBundle mainBundle] URLForResource:@"simple" withExtension:@"html"],@"type":@"5"};
-    NSDictionary *data12 = @{@"title":@"不使用自带的控制器-注册回调",@"url":@"",@"intro":@"",@"type":@"6"};
-    self.dataArray = @[data1,data2,data3,data4,data5,data6,data7,data13,data8,data9,data10,data11,data12];
+    NSDictionary *data10 = @{@"title":@"文章详情-测试回调高度",@"url":@"https://mp.weixin.qq.com/s/Q1AT6iHtJ83pcuflUEmeNg",@"type":@"4"};
+    NSDictionary *data12 = @{@"title":@"用自带的WK控制器-注册回调JSBridge",@"url":[[NSBundle mainBundle] URLForResource:@"simple" withExtension:@"html"],@"type":@"1"};
+    NSDictionary *data11 = @{@"title":@"不使用自带WK的控制器-注册回调JSBridge",@"url":[[NSBundle mainBundle] URLForResource:@"simple" withExtension:@"html"],@"type":@"5"};
+    NSDictionary *data14 = @{@"title":@"不使用自带的控制器-注册回调",@"url":@"",@"intro":@"",@"type":@"6"};
+    self.dataArray = @[data1,data2,data3,data4,data5,data6,data7,data13,data8,data9,data10,data12,data11,data14];
     
     self.demoTableView.delegate = self;
     self.demoTableView.dataSource = self;
@@ -82,6 +83,7 @@
         [self.navigationController pushViewController:ctrl animated:YES];
     }else if([dictionary[@"type"] integerValue] == 4){
         ArticleDetailViewController *ctrl = [[ArticleDetailViewController alloc] init];
+        ctrl.url = dictionary[@"url"];
         [self.navigationController pushViewController:ctrl animated:YES];
     }
 }

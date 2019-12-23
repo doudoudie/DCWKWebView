@@ -61,17 +61,17 @@
            completionHandler:^(id result, NSError *_Nullable error) {
                //retain self
                __unused __attribute__((objc_ownership(strong))) __typeof__(self) self_retain_ = self;
-               
+               NSObject *resultObj = @"";
                if (!error) {
                    if (block) {
-                       NSObject *resultObj = @"";
                        if (!result || [result isKindOfClass:[NSNull class]]) {
-                           resultObj = @"";
+                           resultObj = nil;
                        } else if ([result isKindOfClass:[NSNumber class]]) {
                            resultObj = ((NSNumber *)result).stringValue;
                        } else if ([result isKindOfClass:[NSObject class]]){
                            resultObj = (NSObject *)result;
                        } else {
+                           resultObj = nil;
                            NSLog(@"evaluate js return type:%@, js:%@",
                                        NSStringFromClass([result class]),
                                        script);
@@ -81,9 +81,10 @@
                        }
                    }
                } else {
+                   resultObj = nil;
                    NSLog(@"evaluate js Error : %@ %@", error.description, script);
                    if (block) {
-                       block(@"");
+                       block(resultObj);
                    }
                }
            }];

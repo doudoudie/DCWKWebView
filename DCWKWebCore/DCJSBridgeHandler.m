@@ -35,11 +35,6 @@
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
 {
     NSLog(@"%@",NSStringFromSelector(_cmd));
-    NSLog(@"%@",message.body);
-    
-    if([self.delegate respondsToSelector:@selector(userContentController:didReceiveScriptMessage:)]){
-        [self.delegate userContentController:userContentController didReceiveScriptMessage:message];
-    }
     
     if ([message.name isEqualToString:@"DCJSBridge"]) {
         if ([message.body isKindOfClass:[NSDictionary class]]) {

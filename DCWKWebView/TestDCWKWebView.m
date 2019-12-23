@@ -12,7 +12,7 @@
 #import "DCWKWebViewHandle.h"
 #import "DCJSBridgeHandler.h"
 #import "WKWebView+DCExtension.h"
-
+#import "DCWKWebViewConfig.h"
 #import "ArticleDetailViewController.h"
 
 @interface TestDCWKWebView ()<WKUIDelegate>
@@ -24,15 +24,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.view.backgroundColor = UIColor.whiteColor;
     [self.view addSubview:self.wkWebView];
     
     [self.jsBridgeHandler registerHandler:@"testRegisrerJSBridge" responseHandler:^(NSInteger callbackId, NSString * _Nonnull handlerName, id  _Nonnull responseData) {
         NSLog(@"%@",handlerName);
-    }];
-    
-    [self.jsBridgeHandler registerHandler:@"testPOSTRequest" responseHandler:^(NSInteger callbackId, NSString * _Nonnull handlerName, id  _Nonnull responseData) {
-        [self.wkWebView requestUrl:self.test_Url parameters:responseData];
     }];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"注入JS" style:UIBarButtonItemStylePlain target:self action:@selector(evaluateJS)];
@@ -81,8 +77,41 @@
    
     NSLog(@"%@",absoluteString);
     
+    if ([absoluteString hasPrefix:@"https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb"] && ![absoluteString hasSuffix:[NSString stringWithFormat:@"redirect_url=%@://",[DCWKWebViewConfig sharedInstance].wxfqSchemes]]) {
+        decisionHandler(WKNavigationActionPolicyCancel);
+        
+        //The string Scheme_Domain must be configured by wechat background. It must be your company first domin. You also should configure "URL types" in the Info.plist file.
+        
+        // 1. If the url contain "redirect_url" : We need to remember it to use our scheme replace it.
+        // 2. If the url not contain "redirect_url" , We should add it so that we will could jump to our app.
+        //  Note : 2. if the redirect_url is not last string, you should use correct strategy, because the redirect_url's value may contain some "&" special character so that my cut method may be incorrect.
+        static NSString *endPayRedirectURL = nil;
+        NSString *redirectUrl = nil;
+        NSURLRequest *request = navigationAction.request;
+        if ([absoluteString containsString:@"redirect_url="]) {
+            NSRange redirectRange = [absoluteString rangeOfString:@"redirect_url"];
+            endPayRedirectURL =  [absoluteString substringFromIndex:redirectRange.location+redirectRange.length+1];
+            redirectUrl = [[absoluteString substringToIndex:redirectRange.location] stringByAppendingString:[NSString stringWithFormat:@"redirect_url=%@://",[DCWKWebViewConfig sharedInstance].wxfqSchemes]];
+        }else {
+            redirectUrl = [absoluteString stringByAppendingString:[NSString stringWithFormat:@"&redirect_url=%@://",[DCWKWebViewConfig sharedInstance].wxfqSchemes]];
+        }
+        
+        NSMutableURLRequest *newRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:redirectUrl] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+        newRequest.allHTTPHeaderFields = request.allHTTPHeaderFields;
+        newRequest.URL = [NSURL URLWithString:redirectUrl];
+        [webView loadRequest:newRequest];
+        return;
+    }
+    
+    
     decisionHandler(WKNavigationActionPolicyAllow);
     
+}
+
+- (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation{
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    
+    NSLog(@"加载完成");
 }
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message

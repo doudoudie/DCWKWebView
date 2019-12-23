@@ -8,8 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import "DCWKWebMnager.h"
-#import "DCWKWebViewConfig.h"
+#import "AppDelegate+DCWKWebView.h"
 
 @interface AppDelegate ()
 
@@ -22,15 +21,7 @@
     // Override point for customization after application launch.
     
     self.window.backgroundColor = [UIColor grayColor];
-    
-    DCWKWebViewConfig *config = [[DCWKWebViewConfig alloc] init];
-    config.uaString = @"dcapp://";
-    config.protocols = @[@"app://"];
-    config.wxfqSchemes = @"dcwk.wxpay.wxutil.com"; //设置微信H5支付的回调schemes
-    config.isOpenImagePreview = YES;
-    
-    [[DCWKWebMnager sharedInstance] setupDCWKWebView:config];
-    
+    [self setupDCWKWebView];
     ViewController *ctrl = [ViewController new];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:ctrl];
     self.window.rootViewController = nav;

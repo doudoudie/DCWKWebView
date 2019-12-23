@@ -71,6 +71,14 @@
     [[DCWKWebViewPool sharedInstance] enqueueDCWKWebView:wkWebView];
 }
 
+- (void)registerHandler:(NSString*)handlerName responseHandler:(DCBridgeResponseHandler)handler{
+    [self.bridgeHandle registerHandler:handlerName responseHandler:handler];
+}
+
+- (void)removeHandler:(NSString*)handlerName {
+    [self.bridgeHandle removeHandler:handlerName];
+}
+
 - (void)dealloc
 {
     NSLog(@"dealloc DCWKWebMnager");

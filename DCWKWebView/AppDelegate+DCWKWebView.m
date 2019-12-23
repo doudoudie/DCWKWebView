@@ -8,7 +8,8 @@
 
 #import "AppDelegate+DCWKWebView.h"
 #import "DCWKWebViewCtrl.h"
-
+#import "DCWKWebMnager.h"
+#import "DCWKWebViewConfig.h"
 #import "ArticleDetailViewController.h"
 
 @implementation AppDelegate (DCWKWebView)
@@ -22,6 +23,21 @@
         NSLog(@"H5微信支付回调的地方 %s",__func__);
     }
     return YES;
+}
+
+- (void)setupDCWKWebView {
+    DCWKWebViewConfig *config = [[DCWKWebViewConfig alloc] init];
+    config.uaString = @"dcapp://";
+    config.protocols = @[@"app://"];
+    config.wxfqSchemes = @"dcwk.wxpay.wxutil.com"; //设置微信H5支付的回调schemes
+    config.isOpenImagePreview = YES;
+    
+    [[DCWKWebMnager sharedInstance] setupDCWKWebView:config];
+    
+    [[DCWKWebMnager sharedInstance] registerHandler:@"testRegisrerJSBridge" responseHandler:^(NSInteger callbackId, NSString * _Nonnull handlerName, id  _Nonnull responseData) {
+        NSLog(@"%@",handlerName);
+    }];
+    
 }
 
 - (void)wkWebViewQrCodeReader:(NSString *)qrCodeContent{

@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AppDelegate (DCWKWebView)
 
+- (void)setupDCWKWebView;
+
 // 长按识别二维码
 - (void)wkWebViewQrCodeReader:(NSString *)qrCodeContent;
 

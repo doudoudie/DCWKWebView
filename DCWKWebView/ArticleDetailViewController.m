@@ -7,9 +7,12 @@
 //
 
 #import "ArticleDetailViewController.h"
+#import "DCWKWebView.h"
+#import "DCWKWebMnager.h"
 
-@interface ArticleDetailViewController ()
-
+@interface ArticleDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
+@property (nonatomic,strong) DCWKWebView *wkWebView;
+@property (nonatomic,strong) UITableView *tableView;
 @end
 
 @implementation ArticleDetailViewController
@@ -21,6 +24,55 @@
     self.view.backgroundColor = UIColor.whiteColor;
     self.title = @"文章详细";
     
+    [self.view addSubview:self.tableView];
+    
+    self.tableView.tableHeaderView = self.wkWebView;
+    [self.tableView reloadData];
+}
+
+- (UITableView *)tableView {
+    if(!_tableView){
+        _tableView = [[UITableView alloc]  initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height) style:UITableViewStylePlain];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.tableFooterView = [UIView new];
+    }
+    
+    return _tableView;
+}
+
+- (DCWKWebView *)wkWebView {
+    if (!_wkWebView) {
+        _wkWebView = [[DCWKWebMnager sharedInstance] dequeueDCWKWebViewWithDelegate:self];
+        _wkWebView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 300);
+        [_wkWebView requestUrl:[NSURL URLWithString:self.url]];
+        
+    }
+    return _wkWebView;
+}
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 3;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *identifier = @"cellIdentifier";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    if(cell == nil){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    }
+    
+    cell.textLabel.text = @"推荐或者评论区域";
+    
+    return cell;
+}
+
+#pragma mark - wkWebViewContentSize 高度的回调
+- (void)wkWebViewContentSizeHeight:(CGFloat)height {
+    _wkWebView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height);
+    self.tableView.tableHeaderView = self.wkWebView;
+    //[self.tableView reloadData];
 }
 
 /*
